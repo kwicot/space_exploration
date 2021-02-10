@@ -41,7 +41,7 @@ public class CameraController : MonoBehaviour
                     CameraPivot.transform.eulerAngles.x + v,
                     CameraPivot.transform.eulerAngles.y + h,
                     CameraPivot.transform.eulerAngles.z); */
-        CameraPivot.transform.rotation = Quaternion.Lerp(transform.rotation, ship.transform.rotation, 0.1f);
+        CameraPivot.transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(vertical,horizont,0), 0.1f);
     }
     void MoveUpdate()
     {

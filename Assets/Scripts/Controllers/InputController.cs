@@ -57,7 +57,7 @@ public class InputController : MonoBehaviour
         cam = Camera.main;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (Input.GetKey(MoveForwardKey)) onMoveForwardKeyPressed();
         if (Input.GetKey(MoveBackwardKey)) onMoveBackwardKeyPressed();

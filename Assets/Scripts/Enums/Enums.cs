@@ -11,3 +11,10 @@ public enum ShipState
     Jumping,
     AutoCollecting
 }
+public enum BlockTypes
+{
+    Block,
+    Engine,
+    Giroscope,
+    Accumulator
+}

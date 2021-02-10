@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ShipController : MonoBehaviour
 {
+    public static ShipController singltone;
     public Transform LookTarget;
 
 
@@ -13,10 +14,14 @@ public class ShipController : MonoBehaviour
 
     [HideInInspector]
     public Rigidbody rb;
+    HashSet<ShipBlockBase> Blocks = new HashSet<ShipBlockBase>();
 
     void Start()
     {
-        
+        Init();
+    }
+    void Init()
+    {
         InputController.input.onMoveForwardKeyPressed += MoveForward;
         InputController.input.onMoveBackwardKeyPressed += MoveBackward;
         InputController.input.onMoveLeftKeyPressed += MoveLeft;
@@ -30,19 +35,27 @@ public class ShipController : MonoBehaviour
     void FixedUpdate()
     {
         if (ship.Power > 0)
+        {
             RotationUpdate();
+            ship.Power -= ship.PowerConsumption;
+        }
+
+
 
         ship.speed = rb.velocity.magnitude;
-
-
-
         Debug.Log(ship.speed);
     }
 
     void MoveForward()
     {
         if (ship.Power > 0)
-            rb.AddForce(transform.forward * 70);
+            foreach (var b in Blocks)
+            {
+                if(b is BlockEngine)
+                {
+
+                }
+            }
     }
     void MoveLeft()
     {
@@ -74,8 +87,35 @@ public class ShipController : MonoBehaviour
     }
     void RotationUpdate()
     {
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(-transform.right.x + rotateUpDown,transform.localRotation.y + rotateLeftRight, turnLeftRignt), 0.1f);
-        //transform.LookAt(LookTarget);
-        //transform.rotation = Quaternion.Lerp(transform.rotation, Camera.main.transform.rotation, 0.1f);
+        transform.localRotation = Quaternion.Euler(rotateUpDown, rotateLeftRight, turnLeftRignt);
+    }
+    void RecalcParams()
+    {
+        ship.Weight = 0;
+        ship.TotalForce = 0;
+        ship.TotalHealth = 0;
+        ship.TotalPower = 0;
+        ship.TotalShield = 0;
+        foreach(var b in Blocks)
+        {
+            ship.Weight += b.weight;
+            ship.TotalHealth += b.Health;
+            if (b is BlockAccumulator) ship.TotalPower += b.gameObject.GetComponent<BlockAccumulator>().PowerMax;
+            if (b is BlockEngine) ship.TotalForce += b.gameObject.GetComponent<BlockEngine>().ForceMax;
+
+
+        }
+        rb.mass = ship.Weight;
+        
+    }
+    public void AddBlock(ShipBlockBase block)
+    {
+        Blocks.Add(block);
+        RecalcParams();
+    }
+    public void RemoveBlock(ShipBlockBase block)
+    {
+        Blocks.Remove(block);
+        RecalcParams();
     }
 }

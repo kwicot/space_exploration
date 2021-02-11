@@ -78,6 +78,5 @@ public class InputController : MonoBehaviour
         OnMouseMove(h * CameraHorizontalSpeed, v * CameraVerticalSpeed);
 
 
-        Cursor.lockState = CursorLockMode.Locked;
     }
 }

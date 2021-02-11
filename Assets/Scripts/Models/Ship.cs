@@ -14,6 +14,7 @@ public class Ship
     public float TotalForce;
     public float Force;
     public float PowerConsumption;
+    public float PowerConsumptionEngines;
     public float Weight;
 
 

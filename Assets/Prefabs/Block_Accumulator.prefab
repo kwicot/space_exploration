@@ -112,5 +112,5 @@ MonoBehaviour:
   Description: 
   MaxHealth: 100
   Health: 100
-  weight: 20
+  weight: 2
   PowerMax: 100

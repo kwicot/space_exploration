@@ -1,19 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShipController : MonoBehaviour
 {
     public static ShipController singltone;
-
+    public GameObject TargetLook;
     Ship ship;
 
 
 
     [HideInInspector]
     public Rigidbody rb;
-    HashSet<ShipBlockBase> Blocks = new HashSet<ShipBlockBase>();
+    List<ShipBlockBase> Blocks = new List<ShipBlockBase>();
     public PlayMode playMode = PlayMode.Fly;
+    
+    //Временно
+    public Text speedT;
 
     void Start()
     {
@@ -47,34 +51,36 @@ public class ShipController : MonoBehaviour
 
 
         ship.speed = rb.velocity.magnitude;
-        //Debug.Log(ship.speed);
+        speedT.text = ship.speed.ToString();
     }
 
     void MoveForward()
     {
         if (ship.Power > 0 && playMode == PlayMode.Fly)
-            foreach (var b in Blocks)
-            {
-                if(b is BlockEngine)
-                {
-
-                }
-            }
+        {
+            rb.AddForce(transform.forward * ship.TotalForce);
+        }
     }
     void MoveLeft()
     {
-        if (ship.Power > 0&& playMode == PlayMode.Fly)
-            rb.AddForce(-transform.right * 70);
+        if (ship.Power > 0 && playMode == PlayMode.Fly)
+        {
+            rb.AddForce(-transform.right * ship.TotalForce);
+        }
     }
     void MoveRight()
     {
-        if (ship.Power > 0&& playMode == PlayMode.Fly)
-            rb.AddForce(transform.right * 70);
+        if (ship.Power > 0 && playMode == PlayMode.Fly)
+        {
+            rb.AddForce(transform.right * ship.TotalForce);
+        }
     }
     void MoveBackward()
     {
-        if (ship.Power > 0&& playMode == PlayMode.Fly)
-            rb.AddForce(-transform.forward * 70);
+        if (ship.Power > 0 && playMode == PlayMode.Fly)
+        {
+            rb.AddForce(-transform.forward * ship.TotalForce);
+        }
     }
 
     float turnLeftRignt;
@@ -94,7 +100,7 @@ public class ShipController : MonoBehaviour
 
     void RotationUpdate()
     {
-        transform.localRotation = Quaternion.Euler(rotateUpDown, rotateLeftRight, turnLeftRignt);
+        transform.LookAt(TargetLook.transform);
     }
     void RecalcParams()
     {

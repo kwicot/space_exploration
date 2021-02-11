@@ -35,13 +35,27 @@ public class CameraController : MonoBehaviour
     float vertical;
     void RotateUpdate(float h, float v)
     {
-        horizont += h;
-        vertical += v;
-        /*CameraPivot.transform.eulerAngles = new Vector3(
-                    CameraPivot.transform.eulerAngles.x + v,
-                    CameraPivot.transform.eulerAngles.y + h,
-                    CameraPivot.transform.eulerAngles.z); */
-        CameraPivot.transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(vertical,horizont,0), 0.1f);
+        if (ShipController.singltone.playMode == PlayMode.Fly)
+        {
+
+            horizont += h;
+            vertical += v;
+            /*CameraPivot.transform.eulerAngles = new Vector3(
+                        CameraPivot.transform.eulerAngles.x + v,
+                        CameraPivot.transform.eulerAngles.y + h,
+                        CameraPivot.transform.eulerAngles.z); */
+            CameraPivot.transform.rotation =
+                Quaternion.Lerp(transform.rotation, Quaternion.Euler(vertical, horizont, 0), 0.1f);
+        }
+        else
+        {
+            if (Input.GetMouseButton(1))
+            {
+                horizont += Input.GetAxis("Mouse X");
+                vertical -= Input.GetAxis("Mouse Y");
+                CameraPivot.transform.rotation = Quaternion.Euler(vertical * 4,horizont * 4,0);
+            }
+        }
     }
     void MoveUpdate()
     {

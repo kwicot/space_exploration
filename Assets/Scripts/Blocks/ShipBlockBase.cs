@@ -9,6 +9,7 @@ public class ShipBlockBase : MonoBehaviour
     public float MaxHealth;
     public float Health;
     public float weight;
+    public int ID;
     public void Damage(float dmg)
     {
         Health -= dmg;

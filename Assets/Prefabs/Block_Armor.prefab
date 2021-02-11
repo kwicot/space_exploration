@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7832446866375435328}
   - component: {fileID: 1339616536678832294}
   - component: {fileID: 302086613404057870}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Block_Armor
   m_TagString: Untagged
   m_Icon: {fileID: 0}

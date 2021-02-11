@@ -5,12 +5,14 @@ using UnityEngine;
 public class BuildController : MonoBehaviour
 {
     public bool IsBuildMode;
+    public LayerMask layerMask;
     public List<GameObject> BlockPrefabs = new List<GameObject>();
     public GameObject CurrentBlock;
+    private Rigidbody rb;
     GameObject block;
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -18,17 +20,25 @@ public class BuildController : MonoBehaviour
         if (IsBuildMode)
         {
             RaycastHit hit;
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition),out hit, 1000))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100, layerMask))
             {
-                Transform pos = hit.transform;
-                block.transform.position = pos.position + Vector3.right;
-                block.transform.rotation = pos.rotation;
+                block.transform.position = hit.collider.transform.position + hit.normal;
+                block.transform.rotation = hit.transform.rotation;
+                if (Input.GetKeyDown(KeyCode.C)) BuildBlock();
             }
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha1)) EnterBuildMode();
         if (Input.GetKeyDown(KeyCode.Alpha2)) ExitBuildMode();
         if (Input.GetKeyDown(KeyCode.Alpha3)) NextBlock();
+    }
+
+    void BuildBlock()
+    {
+        GameObject b = Instantiate(CurrentBlock, block.transform.position, block.transform.rotation, transform);
+        b.layer = 6;
+        var s = b.GetComponent<ShipBlockBase>();
+        ShipController.singltone.AddBlock(s);
     }
 
     public void EnterBuildMode()
@@ -38,11 +48,16 @@ public class BuildController : MonoBehaviour
             IsBuildMode = true;
             CurrentBlock = BlockPrefabs[0];
             block = Instantiate(CurrentBlock);
+            rb.isKinematic = true;
+            ShipController.singltone.playMode = PlayMode.Build;
         }
+        
     }
     public void ExitBuildMode()
     {
         IsBuildMode = false;
+        ShipController.singltone.playMode = PlayMode.Fly;
+        rb.isKinematic = false;
         Destroy(block);
     }
 

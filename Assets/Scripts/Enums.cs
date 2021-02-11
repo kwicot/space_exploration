@@ -18,3 +18,9 @@ public enum BlockTypes
     Giroscope,
     Accumulator
 }
+
+public enum PlayMode
+{
+    Fly,
+    Build
+}

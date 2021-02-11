@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7407294311742588491}
   - component: {fileID: 7407294311742588490}
   - component: {fileID: 2074410040444440784}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Block_Accumulator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
